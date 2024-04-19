@@ -1,4 +1,4 @@
 package ex.arnewport.domain;
 
-public class PatientService {
+public class Result {
 }
