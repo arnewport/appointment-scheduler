@@ -26,9 +26,9 @@ public class AppointmentJdbcTemplateRepository implements AppointmentRepository 
     public Appointment findById(int id) {
 
         final String sql = """
-                select *
-                from appointment
-                where appointment_id = ?;
+                SELECT *
+                FROM appointment
+                WHERE appointment_id = ?;
                 """;
 
         return jdbcTemplate.query(sql, new AppointmentMapper(), id).stream()
@@ -70,9 +70,9 @@ public class AppointmentJdbcTemplateRepository implements AppointmentRepository 
                     .append(beforeDate);
         }
         if (ascending) {
-            sqlQuery.append(" ORDER BY date ASC");
+            sqlQuery.append(" ORDER BY date ASC LIMIT 100");
         } else {
-            sqlQuery.append(" ORDER BY date DESC");
+            sqlQuery.append(" ORDER BY date DESC LIMIT 100");
         }
         String sql = sqlQuery.toString();
 
