@@ -2,6 +2,7 @@ package ex.arnewport.controllers;
 
 import ex.arnewport.domain.AppointmentService;
 import ex.arnewport.models.Appointment;
+import ex.arnewport.models.SearchCriteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class AppointmentController {
         this.service = service;
     }
 
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public ResponseEntity<Appointment> findById(@PathVariable int appointmentId) {
         Appointment appointment = service.findById(appointmentId);
         if (appointment == null) {
@@ -31,11 +32,8 @@ public class AppointmentController {
     // TODO: separate concerns; handle errors
     @GetMapping("/search")
     public List<Appointment> findByParameters(
-            @RequestBody Appointment appointmentCriteria,
-            @RequestParam boolean ascending,
-            @RequestParam LocalDate afterDate,
-            @RequestParam LocalDate beforeDate
+            @RequestBody SearchCriteria search
     ) {
-        return service.findByParameters(appointmentCriteria, ascending, afterDate, beforeDate);
+        return service.findByParameters(search);
     }
 }

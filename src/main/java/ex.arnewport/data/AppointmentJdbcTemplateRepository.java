@@ -2,6 +2,7 @@ package ex.arnewport.data;
 
 import ex.arnewport.data.mappers.AppointmentMapper;
 import ex.arnewport.models.Appointment;
+import ex.arnewport.models.SearchCriteria;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -36,40 +37,40 @@ public class AppointmentJdbcTemplateRepository implements AppointmentRepository 
     }
 
     @Override
-    public List<Appointment> findByParameters(Appointment appointment, boolean ascending, LocalDate afterDate, LocalDate beforeDate) {
+    public List<Appointment> findByParameters(SearchCriteria search) {
         StringBuilder sqlQuery = new StringBuilder("SELECT * FROM appointments WHERE 1=1");
-        if (!appointment.getPatientFirstName().isEmpty()) {
+        if (!search.getPatientFirstName().isEmpty()) {
             sqlQuery.append(" AND patient_first_name = ")
-                    .append(appointment.getPatientFirstName());
+                    .append(search.getPatientFirstName());
         }
-        if (!appointment.getPatientLastName().isEmpty()) {
+        if (!search.getPatientLastName().isEmpty()) {
             sqlQuery.append(" AND patient_last_name = ")
-                    .append(appointment.getPatientLastName());
+                    .append(search.getPatientLastName());
         }
-        if (!appointment.getProviderFirstName().isEmpty()) {
+        if (!search.getProviderFirstName().isEmpty()) {
             sqlQuery.append(" AND provider_first_name = ")
-                    .append(appointment.getProviderFirstName());
+                    .append(search.getProviderFirstName());
         }
-        if (!appointment.getProviderLastName().isEmpty()) {
+        if (!search.getProviderLastName().isEmpty()) {
             sqlQuery.append(" AND provider_last_name = ")
-                    .append(appointment.getProviderLastName());
+                    .append(search.getProviderLastName());
         }
-        if (afterDate != null && beforeDate != null) {
+        if (search.getAfterDate() != null && search.getBeforeDate() != null) {
             sqlQuery.append(" AND (date BETWEEN ")
-                    .append(afterDate)
+                    .append(search.getAfterDate())
                     .append(" AND ")
-                    .append(beforeDate)
+                    .append(search.getBeforeDate())
                     .append(")");
         }
-        if (afterDate != null) {
+        if (search.getAfterDate() != null) {
             sqlQuery.append(" AND date >= ")
-                    .append(afterDate);
+                    .append(search.getAfterDate());
         }
-        if (beforeDate != null) {
+        if (search.getBeforeDate() != null) {
             sqlQuery.append(" AND date <= ")
-                    .append(beforeDate);
+                    .append(search.getBeforeDate());
         }
-        if (ascending) {
+        if (search.isAscending()) {
             sqlQuery.append(" ORDER BY date ASC LIMIT 100");
         } else {
             sqlQuery.append(" ORDER BY date DESC LIMIT 100");

@@ -1,12 +1,13 @@
 package ex.arnewport.data;
 
 import ex.arnewport.models.Appointment;
+import ex.arnewport.models.SearchCriteria;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface AppointmentRepository {
     Appointment findById(int id);
-    List<Appointment> findByParameters(Appointment appointment, boolean ascending, LocalDate afterDate, LocalDate beforeDate);
+    List<Appointment> findByParameters(SearchCriteria search);
     Appointment create(Appointment appointment);
 }
