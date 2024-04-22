@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -30,7 +29,7 @@ public class AppointmentController {
     }
 
     // TODO: separate concerns; handle errors
-    @GetMapping("/search")
+    @PostMapping("/search")
     public List<Appointment> findByParameters(
             @RequestBody SearchCriteria search
     ) {
