@@ -1,5 +1,6 @@
 package ex.arnewport.controllers;
 
+import ex.arnewport.domain.Result;
 import ex.arnewport.domain.AppointmentService;
 import ex.arnewport.models.Appointment;
 import ex.arnewport.models.SearchCriteria;
@@ -28,11 +29,22 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
-    // TODO: separate concerns; handle errors
     @PostMapping("/search")
     public List<Appointment> findByParameters(
             @RequestBody SearchCriteria search
     ) {
         return service.findByParameters(search);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Object> create(@RequestBody Appointment appointment) {
+        Result<Appointment> result = service.create(appointment);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+        }
+        if (result.getMessages().contains("conflict")) {
+            return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 }
